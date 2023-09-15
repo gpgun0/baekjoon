@@ -1,28 +1,26 @@
-#include <string>
-#include <vector>
-#include <map>
-#include <iostream>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-map<string, vector<int>> direction = {
-    {"E", {0, 1}},
-    {"W", {0, -1}},
-    {"S", {1, 0}},
-    {"N", {-1, 0}}
+int dx[4] = {0, 0, 1, -1};
+int dy[4] = {1, -1, 0, 0};
+map<string, int> direction = {
+    {"E", 0},
+    {"W", 1},
+    {"S", 2},
+    {"N", 3}
 };
+
 vector<string> split(string route, string delimeter) {
     int position = 0;
     vector<string> result;
     string token = "";
     
     while ((position = route.find(delimeter)) != string::npos) {
-        
         token = route.substr(0, position);
         result.push_back(token);
         route.erase(0, position + delimeter.length());
     }
-    
+
     result.push_back(route);
     return result;
 }
@@ -46,38 +44,23 @@ vector<int> solution(vector<string> park, vector<string> routes) {
 
     for (auto route: routes) {
         vector<string> ret = split(route, " ");
-        
-        vector<int> d = direction[ret[0]];
+        int d = direction[ret[0]];
         int cnt = atoi(ret[1].c_str());
         
-        int nx = x + cnt*d[0];
-        int ny = y + cnt*d[1];
-        if (nx < 0 or nx >= park.size() or ny < 0 or ny >= park[0].size()) {
-            continue;
-        }
-        
-        int dx = 0;
-        int dy = 0;
-
+        int nx = x;
+        int ny = y;
         while (cnt--) {
-            if (ret[0] == "E") {
-                dy++;
-            } else if (ret[0] == "W") {
-                dy--;
-            } else if (ret[0] == "S") {
-                dx++;
-            } else {
-                dx--;
-            }
-            if (park[x+dx][y+dy] == 'X') {
-                dx = 0;
-                dy = 0;
+            nx += dx[d], ny += dy[d];
+            if (nx < 0 or nx >= park.size() or ny < 0 or ny >= park[0].size()
+               or park[nx][ny] == 'X') {
+                nx = x;
+                ny = y;
                 break;
             }
         }
 
-        x += dx;
-        y += dy;
+        x = nx;
+        y = ny;
     }
     
     return { x, y };
