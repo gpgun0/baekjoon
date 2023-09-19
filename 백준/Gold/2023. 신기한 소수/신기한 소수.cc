@@ -3,11 +3,15 @@ int n;
 
 using namespace std;
 bool check(int k) {
+    if (k == 2) {
+        return true;
+    }
+
     if (k < 2) {
         return false;
     }
 
-    for (int i=2; i<sqrt(k)+1; i++) {
+    for (int i=2; i<=sqrt(k); i++) {
         if (k%i == 0) {
             return false;
         }
@@ -17,16 +21,12 @@ bool check(int k) {
 }
 
 void dfs(int num) {
-    if (to_string(num).length() == n) {
+    if (num != 0 && to_string(num).length() == n) {
         cout << num << "\n";
         return;
     }
 
     for (int i=1; i<10; i++) {
-        if (i%2 == 0) {
-            continue;
-        }
-
         if (check(num*10 + i)) {
             dfs(num*10 + i);
         }
@@ -38,10 +38,7 @@ void dfs(int num) {
 int main() {
     cin >> n;
 
-    dfs(2);
-    dfs(3);
-    dfs(5);
-    dfs(7);
+    dfs(0);
 
     return 0;
 }
